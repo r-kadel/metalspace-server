@@ -9,7 +9,8 @@ const { NODE_ENV } = require('./config');
 
 const usersRouter = require('./users/users-router');
 const authRouter = require('./auth/auth-router');
-const postsRouter = require ('./posts/posts-router');
+const postsRouter = require('./posts/posts-router');
+const commentsRouter = require('./comments/comments-router');
 
 const app = express();
 
@@ -25,13 +26,10 @@ app.use(
   })
 );
 
-app.get('/api', (req, res) => {
-  res.send('Hello, world!');
-});
-
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
+app.use('/api/comments', commentsRouter);
 
 app.use(errorHandler);
 
