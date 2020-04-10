@@ -3,7 +3,6 @@ CREATE TABLE metalspace_users (
   username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
-  date_created TIMESTAMPTZ NOT NULL DEFAULT now()
+  date_created TIMESTAMPTZ NOT NULL DEFAULT now(),
+  profile_image bytea
 );
-
--- picture from fav band? 
