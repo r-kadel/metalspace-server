@@ -11,7 +11,7 @@ const serializeUser = user => ({
   username: xss(user.username),
   email: xss(user.email),
   date_created: user.date_created,
-  profile_image: user.profile_image
+  image_url: user.image_url
 });
 
 usersRouter
@@ -67,7 +67,7 @@ usersRouter
 usersRouter
   .route('/:user_id')
   // check for user id
-  .all((req, res, next) => {
+  .all( (req, res, next) => {
     UsersService.getById(req.app.get('db'), req.params.user_id)
       .then(user => {
         if (!user) {
@@ -91,8 +91,8 @@ usersRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
-    const { username, password, email, profile_image } = req.body;
-    const userToUpdate = { username, password, email, profile_image };
+    const { username, password, email, image_url } = req.body;
+    const userToUpdate = { username, password, email, image_url };
 
     //make sure something is being patched
     const numberOfValues = Object.values(userToUpdate).filter(Boolean).length;

@@ -16,6 +16,7 @@ const PostsService = {
   serializePost(post) {
     return {
       id: post.id,
+      user_id: post.user_id,
       content: xss(post.content),
       date_created: post.date_created
     }

@@ -4,5 +4,7 @@ CREATE TABLE metalspace_users (
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   date_created TIMESTAMPTZ NOT NULL DEFAULT now(),
-  profile_image bytea
+  image_url TEXT,
+  location TEXT,
+  favorite_band TEXT
 );
