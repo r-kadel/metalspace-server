@@ -5,12 +5,20 @@ const PostsService = {
     return knex.select('*').from('metalspace_posts');
   },
 
-  insertPost(db, newPost){
+  getById(knex, id) {
+    return knex.from('metalspace_posts').select('*').where('id', id).first();
+  },
+
+  insertPost(db, newPost) {
     return db
-    .insert(newPost)
-    .into('metalspace_posts')
-    .returning('*')
-    .then(([post]) => post)
+      .insert(newPost)
+      .into('metalspace_posts')
+      .returning('*')
+      .then(([post]) => post);
+  },
+
+  deletePost(db, id) {
+    return db.from('metalspace_posts').where({ id }).delete();
   },
 
   serializePost(post) {
@@ -18,9 +26,9 @@ const PostsService = {
       id: post.id,
       user_id: post.user_id,
       content: xss(post.content),
-      date_created: post.date_created
-    }
-  }
-}
+      date_created: post.date_created,
+    };
+  },
+};
 
-module.exports = PostsService
+module.exports = PostsService;

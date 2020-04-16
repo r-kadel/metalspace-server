@@ -8,7 +8,7 @@ const {
   makeAuthHeader
 } = require('./test-helpers');
 
-describe('Comment endpoints', function () {
+describe.only('Comment endpoints', function () {
   let db;
 
   const testUsers = makeUsers();
@@ -38,6 +38,7 @@ describe('Comment endpoints', function () {
       return supertest(app).get('/api/comments').expect(200, [{
         user: 1,
         id: 1,
+        postId: 1,
         content: "test comment",
         date_created: '2029-01-22T16:28:32.615Z'
       }]);

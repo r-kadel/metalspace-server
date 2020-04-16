@@ -5,6 +5,10 @@ const CommentsService = {
     return knex.select('*').from('metalspace_comments');
   },
 
+  getById(knex, id) {
+    return knex.from('metalspace_comments').select('*').where('id', id).first();
+  },
+
   insertComment(db, newComment){
     return db
     .insert(newComment)
@@ -13,11 +17,16 @@ const CommentsService = {
     .then(([comment]) => comment)
   },
 
+  deleteComment(db, id) {
+    return db.from('metalspace_comments').where({ id }).delete();
+  },
+
   serializeComment(comment) {
     return {
       id: comment.id,
       content: xss(comment.content),
       user: comment.user_id,
+      postId: comment.post_id,
       date_created: comment.date_created
     }
   }

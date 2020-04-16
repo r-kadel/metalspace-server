@@ -76,7 +76,8 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     subject: user.email,
     algorithm: 'HS256'
   });
-  return `Bearer ${token}`;
+  console.log(token)
+  return `bearer ${token}`;
 }
 
 module.exports = {

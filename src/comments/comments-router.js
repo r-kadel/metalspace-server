@@ -36,4 +36,26 @@ commentsRouter
       .catch(next);
   });
 
+  commentsRouter
+  .route('/:comment_id')
+  // check for comment id
+  .all((req, res, next) => {
+    CommentsService.getById(req.app.get('db'), req.params.comment_id)
+      .then((comment) => {
+        if (!comment) {
+          return res.status(404).json({
+            error: { message: `No such comment` },
+          });
+        }
+        res.comment = comment;
+        next();
+      })
+      .catch(next);
+  })
+  .delete(requireAuth, (req, res, next) => {
+    CommentsService.deleteComment(req.app.get('db'), req.params.comment_id)
+      .then((numRowsAffected) => res.status(204))
+      .catch(next);
+  });
+
 module.exports = commentsRouter;
