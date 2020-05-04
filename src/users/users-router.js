@@ -48,31 +48,40 @@ usersRouter
       }
     }
 
+    UsersService.hasUserWithEmail(req.app.get('db'), email).then(
+      (hasUserWithEmail) => {
+        if (hasUserWithEmail)
+          return res.status(400).json({ error: `Email already in use` });
+      }
+    );
+
     // no duplicate usernames
-    UsersService.hasUserWithUserName(req.app.get('db'), username)
-      .then((hasUserWithUserName) => {
+    UsersService.hasUserWithUserName(req.app.get('db'), username).then(
+      (hasUserWithUserName) => {
         if (hasUserWithUserName)
           return res.status(400).json({ error: `Username already taken` });
+      }
+    );
 
-        return UsersService.hashPassword(password).then((hashedPassword) => {
-          const newUser = {
-            username,
-            password: hashedPassword,
-            email,
-            location: location,
-            favorite_band,
-            date_created: 'now()',
-          };
+    UsersService.hashPassword(password)
+      .then((hashedPassword) => {
+        const newUser = {
+          username,
+          password: hashedPassword,
+          email,
+          location: location,
+          favorite_band,
+          date_created: 'now()',
+        };
 
-          return UsersService.insertUser(req.app.get('db'), newUser).then(
-            (user) => {
-              res
-                .status(201)
-                .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                .json(serializeUser(user));
-            }
-          );
-        });
+        return UsersService.insertUser(req.app.get('db'), newUser).then(
+          (user) => {
+            res
+              .status(201)
+              .location(path.posix.join(req.originalUrl, `/${user.id}`))
+              .json(serializeUser(user));
+          }
+        );
       })
       .catch(next);
   });
@@ -104,8 +113,22 @@ usersRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
-    const { username, password, email, image_url, location, favorite_band } = req.body;
-    const userToUpdate = { username, password, email, image_url, location, favorite_band };
+    const {
+      username,
+      password,
+      email,
+      image_url,
+      location,
+      favorite_band,
+    } = req.body;
+    const userToUpdate = {
+      username,
+      password,
+      email,
+      image_url,
+      location,
+      favorite_band,
+    };
 
     //make sure something is being patched
     const numberOfValues = Object.values(userToUpdate).filter(Boolean).length;
@@ -115,6 +138,13 @@ usersRouter
           message: `Request body must contain either 'username', 'password' or 'email'`,
         },
       });
+
+    UsersService.hasUserWithUserName(req.app.get('db'), username).then(
+      (hasUserWithUserName) => {
+        if (hasUserWithUserName)
+          return res.status(400).json({ error: `Username already taken` });
+      }
+    );
 
     UsersService.updateUser(req.app.get('db'), req.params.user_id, userToUpdate)
       .then((numRowsAffected) => {
