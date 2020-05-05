@@ -5,10 +5,10 @@
 
 
 MetalSpace is a social media application for metal heads to engage with each other, talk about the bands they like, share opinions and complain about music in general (especially metal).
-<!-- 
-![ScreenShot](./screenshots/searchstream_landing.png)
-![ScreenShot](./screenshots/searchstream.png)
-![ScreenShot](./screenshots/searchstream_search.png) -->
+
+![ScreenShot](./screenshots/home.png)
+![ScreenShot](./screenshots/landing.png)
+![ScreenShot](./screenshots/search.png)
 
 A user can sign up and log in to their account and is taken to their personal profile page. From there they can edit their personal information, add a profile picture, make posts (go on rants) and see other users comments on their rants. They can also do a search for other users and visit their pages and comment on their rants.
 
@@ -138,4 +138,11 @@ The API is built in node.js and is an express server. It uses knex to work with 
 	      "content" : "this is my first comment"
       }
 
-  .route('/comments/:commentId)
+ .route('/comments/:commentId)
+  .all()
+    verifies that the comment exists
+  })
+
+  .delete(requireAuth, (req, res, next) => {
+    Simply verifies the auth and then deletes the comment given from the ID in params
+  });
